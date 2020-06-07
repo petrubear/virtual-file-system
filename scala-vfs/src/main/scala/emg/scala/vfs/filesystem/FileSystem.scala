@@ -12,7 +12,6 @@ object FileSystem extends App {
   var state = State(root, root)
 
   while (true) {
-
     state.show()
     val input = scanner.nextLine()
     state = Command.from(input).apply(state)

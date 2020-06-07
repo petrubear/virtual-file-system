@@ -13,5 +13,6 @@
     <modules>
         <module>scala-vfs</module>
         <module>java-vfs</module>
+        <module>kotlin-vfs</module>
     </modules>
 </project>
