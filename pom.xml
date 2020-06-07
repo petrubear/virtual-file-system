@@ -8,8 +8,10 @@
     <artifactId>virtual-file-system</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <name>::: Virtual FileSystem :::</name>
 
     <modules>
         <module>scala-vfs</module>
+        <module>java-vfs</module>
     </modules>
 </project>
