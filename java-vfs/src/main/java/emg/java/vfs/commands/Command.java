@@ -6,7 +6,38 @@ public abstract class Command {
     public abstract State apply(State state);
 
     public static Command from(String input) {
-        return new UnknownCommand();
+        final String MKDIR = "mkdir";
+
+        var tokens = input.split(" ");
+        if (input.isEmpty() || tokens.length == 0) {
+            return emptyCommand();
+        } else if (MKDIR.equals(tokens[0])) {
+            if (tokens.length < 2) {
+                return incompleteCommand(MKDIR);
+            } else {
+                return new Mkdir(tokens[1]);
+            }
+        } else {
+            return new UnknownCommand();
+        }
+    }
+
+    private static Command incompleteCommand(String name) {
+        return new Command() {
+            @Override
+            public State apply(State state) {
+                return state.setMessage(name + ": Incomplete Command!");
+            }
+        };
+    }
+
+    private static Command emptyCommand() {
+        return new Command() {
+            @Override
+            public State apply(State state) {
+                return state;
+            }
+        };
     }
 }
 
