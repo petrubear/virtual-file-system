@@ -30,4 +30,12 @@ public class State {
     public State setMessage(String message) {
         return State.apply(root, wd, message);
     }
+
+    public Directory wd() {
+        return wd;
+    }
+
+    public Directory root() {
+        return root;
+    }
 }

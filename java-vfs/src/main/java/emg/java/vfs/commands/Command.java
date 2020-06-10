@@ -7,6 +7,7 @@ public abstract class Command {
 
     public static Command from(String input) {
         final String MKDIR = "mkdir";
+        final String LS = "ls";
 
         var tokens = input.split(" ");
         if (input.isEmpty() || tokens.length == 0) {
@@ -17,6 +18,8 @@ public abstract class Command {
             } else {
                 return new Mkdir(tokens[1]);
             }
+        } else if (LS.equals(tokens[0])) {
+            return new Ls();
         } else {
             return new UnknownCommand();
         }
