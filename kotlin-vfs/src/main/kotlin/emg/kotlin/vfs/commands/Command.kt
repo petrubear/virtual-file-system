@@ -6,20 +6,23 @@ import emg.kotlin.vfs.filesystem.State
 abstract class Command {
     companion object {
         private const val MKDIR = "mkdir"
+        private const val LS = "ls"
         fun from(input: String): Command {
             val tokens = input.split(" ")
             if (input.isEmpty() || tokens.isEmpty()) {
                 return emptyCommand()
-            } else {
-                if (MKDIR.equals(tokens[0])) {
-                    if (tokens.size < 2) {
-                        return incompleteCommand(MKDIR)
-                    } else {
-                        return Mkdir(tokens[1])
-                    }
+            } else if (MKDIR.equals(tokens[0])) {
+                if (tokens.size < 2) {
+                    return incompleteCommand(MKDIR)
+                } else {
+                    return Mkdir(tokens[1])
                 }
+            } else if (LS.equals(tokens[0])) {
+                return LS()
             }
+
             return UnknownCommand()
+
         }
 
         private fun incompleteCommand(name: String): Command {
