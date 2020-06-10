@@ -7,6 +7,7 @@ abstract class Command {
     companion object {
         private const val MKDIR = "mkdir"
         private const val LS = "ls"
+        private const val PWD = "pwd"
         fun from(input: String): Command {
             val tokens = input.split(" ")
             if (input.isEmpty() || tokens.isEmpty()) {
@@ -19,6 +20,8 @@ abstract class Command {
                 }
             } else if (LS.equals(tokens[0])) {
                 return LS()
+            } else if (PWD.equals(tokens[0])) {
+                return Pwd()
             }
 
             return UnknownCommand()
