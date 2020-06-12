@@ -34,6 +34,9 @@ class Directory(override val parentPath: String, override val name: String, val 
 
   override def getType: String = "Dir"
 
+  def isRoot: Boolean = parentPath.isEmpty
+
+  override def isDirectory: Boolean = true
 }
 
 object Directory {
