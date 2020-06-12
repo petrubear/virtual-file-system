@@ -1,5 +1,7 @@
 package emg.java.vfs.files;
 
+import emg.java.vfs.filesystem.FileSystemException;
+
 public abstract class DirEntry {
     protected String parentPath;
     protected String name;
@@ -21,7 +23,13 @@ public abstract class DirEntry {
         return parentPath + Directory.SEPARATOR + name;
     }
 
-    public abstract Directory asDirectory();
+    public Directory asDirectory() {
+        throw new FileSystemException(String.format("%s is not a Directory", name));
+    }
+
+    public File asFile() {
+        throw new FileSystemException(String.format("%s is not a File", name));
+    }
 
     public abstract String getType();
 }

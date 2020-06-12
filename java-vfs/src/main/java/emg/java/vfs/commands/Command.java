@@ -9,6 +9,7 @@ public abstract class Command {
         final String MKDIR = "mkdir";
         final String LS = "ls";
         final String PWD = "pwd";
+        final String TOUCH = "touch";
 
         var tokens = input.split(" ");
         if (input.isEmpty() || tokens.length == 0) {
@@ -23,6 +24,12 @@ public abstract class Command {
             return new Ls();
         } else if (PWD.equals(tokens[0])) {
             return new Pwd();
+        } else if (TOUCH.equals(tokens[0])) {
+            if (tokens.length < 2) {
+                return incompleteCommand(MKDIR);
+            } else {
+                return new Touch(tokens[1]);
+            }
         } else {
             return new UnknownCommand();
         }
