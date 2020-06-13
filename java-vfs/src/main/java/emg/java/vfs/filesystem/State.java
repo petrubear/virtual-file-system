@@ -15,7 +15,7 @@ public class State {
     }
 
     public static State apply(Directory root, Directory wd) {
-        return State.apply(root, root, "");
+        return State.apply(root, wd, "");
     }
 
     public static State apply(Directory root, Directory wd, String output) {

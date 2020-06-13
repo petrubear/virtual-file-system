@@ -78,4 +78,13 @@ public class Directory extends DirEntry {
     public List<DirEntry> contents() {
         return contents;
     }
+
+    @Override
+    public boolean isDirectory() {
+        return true;
+    }
+
+    public boolean isRoot() {
+        return parentPath.isEmpty();
+    }
 }

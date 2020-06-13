@@ -19,4 +19,9 @@ public class File extends DirEntry {
     public String getType() {
         return "File";
     }
+
+    @Override
+    public boolean isFile() {
+        return true;
+    }
 }

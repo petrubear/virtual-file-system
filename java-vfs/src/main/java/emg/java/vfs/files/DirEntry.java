@@ -20,7 +20,11 @@ public abstract class DirEntry {
     }
 
     public String path() {
-        return parentPath + Directory.SEPARATOR + name;
+        var separator = "";
+        if (!Directory.ROOT_PATH.equals(parentPath)) {
+            separator = Directory.SEPARATOR;
+        }
+        return parentPath + separator + name;
     }
 
     public Directory asDirectory() {
@@ -32,4 +36,12 @@ public abstract class DirEntry {
     }
 
     public abstract String getType();
+
+    public boolean isFile() {
+        return false;
+    }
+
+    public boolean isDirectory() {
+        return false;
+    }
 }
