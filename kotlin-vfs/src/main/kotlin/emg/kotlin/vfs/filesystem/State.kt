@@ -2,7 +2,7 @@ package emg.kotlin.vfs.filesystem
 
 import emg.kotlin.vfs.files.Directory
 
-class State constructor(val root: Directory, val wd: Directory, val output: String) {
+class State constructor(val root: Directory, val wd: Directory, private val output: String) {
     companion object {
         const val SHELL_TOKEN = "[kotlin] $ _> "
 

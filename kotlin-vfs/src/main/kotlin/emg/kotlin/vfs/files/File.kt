@@ -7,12 +7,10 @@ class File(parentPath: String, name: String, val contents: String = "") : DirEnt
         }
     }
 
-    override fun getType(): String {
-        return "File"
-    }
+    override fun getType(): String = "File"
 
-    override fun asFile(): File {
-        return this
-    }
+    override fun asFile(): File = this
+
+    override fun isFile(): Boolean = true
 
 }

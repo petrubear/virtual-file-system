@@ -29,10 +29,10 @@ object Command {
     } else if (PWD.equals(tokens(0))) {
       Pwd()
     } else if (TOUCH.equals(tokens(0))) {
-      if (tokens.length < 2) incompleteCommand(MKDIR)
+      if (tokens.length < 2) incompleteCommand(TOUCH)
       else new Touch(tokens(1))
     } else if (CD.equals(tokens(0))) {
-      if (tokens.length < 2) incompleteCommand(MKDIR)
+      if (tokens.length < 2) incompleteCommand(CD)
       else new Cd(tokens(1))
     }
     else new UnknownCommand

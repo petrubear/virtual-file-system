@@ -9,6 +9,7 @@ abstract class Command {
         private const val LS = "ls"
         private const val PWD = "pwd"
         private const val TOUCH = "touch"
+        private const val CD = "cd"
 
         fun from(input: String): Command {
             val tokens = input.split(" ")
@@ -26,12 +27,17 @@ abstract class Command {
                 return Pwd()
             } else if (TOUCH.equals(tokens[0])) {
                 return if (tokens.size < 2) {
-                    incompleteCommand(MKDIR)
+                    incompleteCommand(TOUCH)
                 } else {
                     Touch(tokens[1])
                 }
+            } else if (CD.equals(tokens[0])) {
+                return if (tokens.size < 2) {
+                    incompleteCommand(CD)
+                } else {
+                    Cd(tokens[1])
+                }
             }
-
             return UnknownCommand()
 
         }

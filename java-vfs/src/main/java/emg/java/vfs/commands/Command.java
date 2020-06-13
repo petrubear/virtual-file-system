@@ -27,13 +27,13 @@ public abstract class Command {
             return new Pwd();
         } else if (TOUCH.equals(tokens[0])) {
             if (tokens.length < 2) {
-                return incompleteCommand(MKDIR);
+                return incompleteCommand(TOUCH);
             } else {
                 return new Touch(tokens[1]);
             }
         } else if (CD.equals(tokens[0])) {
             if (tokens.length < 2) {
-                return incompleteCommand(MKDIR);
+                return incompleteCommand(CD);
             } else {
                 return new Cd(tokens[1]);
             }

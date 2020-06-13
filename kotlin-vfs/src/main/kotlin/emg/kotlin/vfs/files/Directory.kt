@@ -4,6 +4,9 @@ import java.util.*
 
 class Directory constructor(parentPath: String, name: String,
                             val contents: List<DirEntry> = Collections.emptyList()) : DirEntry(parentPath, name) {
+
+    fun isRoot(): Boolean = parentPath.isEmpty()
+
     fun hasEntry(name: String): Boolean {
         return findEntry(name) != null
     }
@@ -43,6 +46,9 @@ class Directory constructor(parentPath: String, name: String,
     }
 
     override fun asDirectory(): Directory = this
+
+    override fun isDirectory(): Boolean = true
+
     override fun getType(): String {
         return "Dir"
     }
