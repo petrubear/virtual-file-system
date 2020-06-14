@@ -4,6 +4,11 @@ import scala.annotation.tailrec
 
 class Directory(override val parentPath: String, override val name: String, val contents: List[DirEntry])
   extends DirEntry(parentPath, name) {
+  def removeEntry(entryName: String): Directory = {
+    if (!hasEntry(entryName)) this
+    else new Directory(parentPath, name, contents.filter(x => !x.name.equals(entryName)))
+  }
+
 
   def replaceEntry(entryName: String, newEntry: DirEntry): Directory =
     new Directory(parentPath, name, contents.filter(d => !d.name.equals(entryName)) :+ newEntry)
@@ -25,6 +30,11 @@ class Directory(override val parentPath: String, override val name: String, val 
     if (path.isEmpty) this
     else findEntry(path.head).asDirectory.findDesendant(path.tail)
 
+  def findDesendant(relativePath: String): Directory = {
+    if (relativePath.isEmpty) this
+    else findDesendant(relativePath.split(Directory.SEPARATOR).toList)
+  }
+
   def getAllFoldersInPath: List[String] =
     path.substring(1).split(Directory.SEPARATOR).toList.filter(d => !d.isEmpty)
 
@@ -37,6 +47,8 @@ class Directory(override val parentPath: String, override val name: String, val 
   def isRoot: Boolean = parentPath.isEmpty
 
   override def isDirectory: Boolean = true
+
+  override def toString: String = parentPath + name
 }
 
 object Directory {
