@@ -61,6 +61,14 @@ public class Directory extends DirEntry {
         }
     }
 
+    public Directory findDesendant(String relativePath) {
+        if (relativePath.isEmpty()) {
+            return this;
+        } else {
+            return findDesendant(Arrays.asList(relativePath.split(Directory.SEPARATOR)));
+        }
+    }
+
     public List<String> getAllFoldersInPath() {
         return Arrays.stream(path().substring(1).split(Directory.SEPARATOR)).filter(d -> !d.isEmpty()).collect(Collectors.toList());
     }
@@ -86,5 +94,13 @@ public class Directory extends DirEntry {
 
     public boolean isRoot() {
         return parentPath.isEmpty();
+    }
+
+    public Directory removeEntry(String entryName) {
+        if (!hasEntry(entryName)) {
+            return this;
+        } else {
+            return new Directory(parentPath, name, contents.stream().filter(x -> !x.name.equals(entryName)).collect(Collectors.toList()));
+        }
     }
 }

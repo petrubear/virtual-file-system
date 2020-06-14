@@ -11,6 +11,7 @@ public abstract class Command {
         final String PWD = "pwd";
         final String TOUCH = "touch";
         final String CD = "cd";
+        final String RM = "rm";
 
         var tokens = input.split(" ");
         if (input.isEmpty() || tokens.length == 0) {
@@ -36,6 +37,12 @@ public abstract class Command {
                 return incompleteCommand(CD);
             } else {
                 return new Cd(tokens[1]);
+            }
+        } else if (RM.equals(tokens[0])) {
+            if (tokens.length < 2) {
+                return incompleteCommand(RM);
+            } else {
+                return new Rm(tokens[1]);
             }
         } else {
             return new UnknownCommand();
