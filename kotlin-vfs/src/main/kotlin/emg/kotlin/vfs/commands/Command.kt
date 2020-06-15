@@ -11,6 +11,7 @@ abstract class Command {
         private const val TOUCH = "touch"
         private const val CD = "cd"
         private const val RM = "rm"
+        private const val ECHO = "echo"
 
         fun from(input: String): Command {
             val tokens = input.split(" ")
@@ -43,6 +44,12 @@ abstract class Command {
                     incompleteCommand(RM)
                 } else {
                     Rm(tokens[1])
+                }
+            } else if (ECHO == tokens[0]) {
+                return if (tokens.size < 2) {
+                    incompleteCommand(ECHO)
+                } else {
+                    Echo(tokens.subList(1, tokens.size).toTypedArray())
                 }
             }
             return UnknownCommand()
