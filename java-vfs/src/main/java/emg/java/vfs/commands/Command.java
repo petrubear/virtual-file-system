@@ -2,6 +2,8 @@ package emg.java.vfs.commands;
 
 import emg.java.vfs.filesystem.State;
 
+import java.util.Arrays;
+
 public abstract class Command {
     public abstract State apply(State state);
 
@@ -12,6 +14,7 @@ public abstract class Command {
         final String TOUCH = "touch";
         final String CD = "cd";
         final String RM = "rm";
+        final String ECHO = "echo";
 
         var tokens = input.split(" ");
         if (input.isEmpty() || tokens.length == 0) {
@@ -43,6 +46,12 @@ public abstract class Command {
                 return incompleteCommand(RM);
             } else {
                 return new Rm(tokens[1]);
+            }
+        } else if (ECHO.equals(tokens[0])) {
+            if (tokens.length < 2) {
+                return incompleteCommand(ECHO);
+            } else {
+                return new Echo(Arrays.asList(tokens).subList(1, tokens.length));
             }
         } else {
             return new UnknownCommand();
