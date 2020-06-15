@@ -41,8 +41,13 @@ class Directory constructor(parentPath: String, name: String,
         else findEntry(path[0])!!.asDirectory().findDesendant(path.subList(1, path.size))
     }
 
+    fun findDesendant(relativePath: String): Directory {
+        return if (relativePath.isEmpty()) this
+        else findDesendant(relativePath.split(SEPARATOR).toList())
+    }
+
     fun getAllFoldersInPath(): List<String> {
-        return path().substring(1).split(Directory.SEPARATOR).filter { d -> d.isNotEmpty() }
+        return path().substring(1).split(SEPARATOR).filter { d -> d.isNotEmpty() }
     }
 
     override fun asDirectory(): Directory = this
@@ -53,9 +58,14 @@ class Directory constructor(parentPath: String, name: String,
         return "Dir"
     }
 
+    fun removeEntry(entryName: String): Directory {
+        return if (!hasEntry(entryName)) this
+        else Directory(parentPath, name, contents.filter { x -> x.name != entryName })
+    }
+
     companion object {
-        val SEPARATOR = "/"
-        val ROOT_PATH = "/"
+        const val SEPARATOR = "/"
+        const val ROOT_PATH = "/"
 
         fun root(): Directory {
             return empty("", "")
