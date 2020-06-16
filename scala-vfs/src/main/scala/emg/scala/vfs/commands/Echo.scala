@@ -1,5 +1,6 @@
 package emg.scala.vfs.commands
 
+import emg.scala.vfs.files.{Directory, File}
 import emg.scala.vfs.filesystem.State
 
 import scala.annotation.tailrec
@@ -22,7 +23,34 @@ class Echo(args: Array[String]) extends Command {
     }
   }
 
-  def doEcho(state: State, content: String, fileName: String, append: Boolean): State = ???
+  def getRootAfterEcho(currentDirectory: Directory, path: List[String], contents: String, append: Boolean): Directory = {
+    if (path.isEmpty) currentDirectory
+    else if (path.tail.isEmpty) {
+      val dirEntry = currentDirectory.findEntry(path.head)
+      if (dirEntry == null) currentDirectory.addEntry(new File(currentDirectory.path, path.head, contents))
+      else if (dirEntry.isDirectory) currentDirectory
+      else if (append) currentDirectory.replaceEntry(path.head, dirEntry.asFile.appendContents(contents))
+      else currentDirectory.replaceEntry(path.head, dirEntry.asFile.setContents(contents))
+    } else {
+      val nextDirectory = currentDirectory.findEntry(path.head).asDirectory
+      val newNextDirectory = getRootAfterEcho(nextDirectory, path.tail, contents, append)
+
+      if (newNextDirectory == nextDirectory) currentDirectory
+      else currentDirectory.replaceEntry(path.head, newNextDirectory)
+    }
+  }
+
+  def doEcho(state: State, content: String, fileName: String, append: Boolean): State = {
+    if (fileName.contains(Directory.SEPARATOR)) {
+      state.setMessage("Echo: filename must not contain separators")
+    } else {
+      val newRoot: Directory = getRootAfterEcho(state.root, state.wd.getAllFoldersInPath :+ fileName, content, append)
+      if (newRoot == state.root)
+        state.setMessage(s"$fileName: No such file or directory")
+      else
+        State(newRoot, newRoot.findDesendant(state.wd.getAllFoldersInPath))
+    }
+  }
 
   def createContent(args: Array[String], topIndex: Int): String = {
     @tailrec

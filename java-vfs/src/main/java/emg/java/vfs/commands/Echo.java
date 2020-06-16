@@ -1,5 +1,7 @@
 package emg.java.vfs.commands;
 
+import emg.java.vfs.files.Directory;
+import emg.java.vfs.files.File;
 import emg.java.vfs.filesystem.State;
 
 import java.util.List;
@@ -46,8 +48,45 @@ public class Echo extends Command {
     }
 
     private State doEcho(State state, String contents, String fileName, boolean append) {
-        return null;
-
+        if (fileName.contains(Directory.SEPARATOR)) {
+            return state.setMessage("Echo: filename must not contain separators");
+        } else {
+            var foldersInPath = state.wd().getAllFoldersInPath();
+            foldersInPath.add(fileName);
+            var newRoot = getRootAfterEcho(state.root(), foldersInPath, contents, append);
+            if (newRoot == state.root()) {
+                return state.setMessage(fileName = ": No such file or directory");
+            } else {
+                return State.apply(newRoot, newRoot.findDesendant(state.wd().getAllFoldersInPath()));
+            }
+        }
     }
+
+    private Directory getRootAfterEcho(Directory currentDirectory, List<String> path, String contents, boolean append) {
+        if (path.isEmpty()) {
+            return currentDirectory;
+        } else if (path.subList(1, path.size()).isEmpty()) {
+            var dirEntry = currentDirectory.findEntry(path.get(0));
+            if (dirEntry == null) {
+                return currentDirectory.addEntry(new File(currentDirectory.path(), path.get(0), contents));
+            } else if (dirEntry.isDirectory()) {
+                return currentDirectory;
+            } else if (append) {
+                return currentDirectory.replaceEntry(path.get(0), dirEntry.asFile().appendContents(contents));
+            } else {
+                return currentDirectory.replaceEntry(path.get(0), dirEntry.asFile().setContents(contents));
+            }
+        } else {
+            var nextDirectory = currentDirectory.findEntry(path.get(0)).asDirectory();
+            var newNextDirectory = getRootAfterEcho(nextDirectory, path.subList(1, path.size()), contents, append);
+
+            if (newNextDirectory == nextDirectory) {
+                return currentDirectory;
+            } else {
+                return currentDirectory.replaceEntry(path.get(0), newNextDirectory);
+            }
+        }
+    }
+
 }
 

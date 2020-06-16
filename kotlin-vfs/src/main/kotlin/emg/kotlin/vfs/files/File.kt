@@ -12,5 +12,11 @@ class File(parentPath: String, name: String, val contents: String = "") : DirEnt
     override fun asFile(): File = this
 
     override fun isFile(): Boolean = true
+    fun appendContents(newContents: String): File {
+        return setContents(contents + "\n" + newContents)
+    }
 
+    fun setContents(newContents: String): File {
+        return File(parentPath, name, newContents)
+    }
 }

@@ -1,9 +1,11 @@
 package emg.java.vfs.files;
 
 public class File extends DirEntry {
+    private String contents;
 
     public File(String parentPath, String name, String contents) {
         super(parentPath, name);
+        this.contents = contents;
     }
 
     public static File empty(String parentPath, String name) {
@@ -23,5 +25,13 @@ public class File extends DirEntry {
     @Override
     public boolean isFile() {
         return true;
+    }
+
+    public File appendContents(String newContents) {
+        return setContents(contents + "\n" + newContents);
+    }
+
+    public File setContents(String newContents) {
+        return new File(parentPath, name, newContents);
     }
 }
