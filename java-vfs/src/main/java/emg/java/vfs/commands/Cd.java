@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static emg.java.vfs.extensions.ListExtensions.head;
+import static emg.java.vfs.extensions.ListExtensions.tail;
+
 public class Cd extends Command {
     private final String dir;
 
@@ -52,16 +55,16 @@ public class Cd extends Command {
     }
 
     private DirEntry findEntryHelper(Directory currentDirectory, List<String> path) {
-        if (path.isEmpty() || path.get(0).isEmpty()) {
+        if (path.isEmpty() || head(path).isEmpty()) {
             return currentDirectory;
-        } else if (path.subList(1, path.size()).isEmpty()) {
-            return currentDirectory.findEntry(path.get(0));
+        } else if (tail(path).isEmpty()) {
+            return currentDirectory.findEntry(head(path));
         } else {
-            var nextDir = currentDirectory.findEntry(path.get(0));
+            var nextDir = currentDirectory.findEntry(head(path));
             if (nextDir == null || !nextDir.isDirectory()) {
                 return null;
             } else {
-                return findEntryHelper(nextDir.asDirectory(), path.subList(1, path.size()));
+                return findEntryHelper(nextDir.asDirectory(), tail(path));
             }
         }
     }
@@ -69,17 +72,17 @@ public class Cd extends Command {
     private List<String> collapseRelativeTokens(List<String> path, List<String> result) {
         if (path.isEmpty()) {
             return result;
-        } else if (".".equals(path.get(0))) {
-            return collapseRelativeTokens(path.subList(1, path.size()), result);
-        } else if ("..".equals(path.get(0))) {
+        } else if (".".equals(head(path))) {
+            return collapseRelativeTokens(tail(path), result);
+        } else if ("..".equals(head(path))) {
             if (result.isEmpty()) {
                 return null;
             } else {
-                return collapseRelativeTokens(path.subList(1, path.size()), result.subList(0, result.size() - 1));
+                return collapseRelativeTokens(tail(path), result.subList(0, result.size() - 1));
             }
         } else {
-            result.add(path.get(0));
-            return collapseRelativeTokens(path.subList(1, path.size()), result);
+            result.add(head(path));
+            return collapseRelativeTokens(tail(path), result);
         }
     }
 }

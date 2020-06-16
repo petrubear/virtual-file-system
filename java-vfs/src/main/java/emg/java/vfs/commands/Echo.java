@@ -6,6 +6,9 @@ import emg.java.vfs.filesystem.State;
 
 import java.util.List;
 
+import static emg.java.vfs.extensions.ListExtensions.head;
+import static emg.java.vfs.extensions.ListExtensions.tail;
+
 public class Echo extends Command {
     private final String[] args;
 
@@ -65,25 +68,25 @@ public class Echo extends Command {
     private Directory getRootAfterEcho(Directory currentDirectory, List<String> path, String contents, boolean append) {
         if (path.isEmpty()) {
             return currentDirectory;
-        } else if (path.subList(1, path.size()).isEmpty()) {
-            var dirEntry = currentDirectory.findEntry(path.get(0));
+        } else if (tail(path).isEmpty()) {
+            var dirEntry = currentDirectory.findEntry(head(path));
             if (dirEntry == null) {
-                return currentDirectory.addEntry(new File(currentDirectory.path(), path.get(0), contents));
+                return currentDirectory.addEntry(new File(currentDirectory.path(), head(path), contents));
             } else if (dirEntry.isDirectory()) {
                 return currentDirectory;
             } else if (append) {
-                return currentDirectory.replaceEntry(path.get(0), dirEntry.asFile().appendContents(contents));
+                return currentDirectory.replaceEntry(head(path), dirEntry.asFile().appendContents(contents));
             } else {
-                return currentDirectory.replaceEntry(path.get(0), dirEntry.asFile().setContents(contents));
+                return currentDirectory.replaceEntry(head(path), dirEntry.asFile().setContents(contents));
             }
         } else {
-            var nextDirectory = currentDirectory.findEntry(path.get(0)).asDirectory();
-            var newNextDirectory = getRootAfterEcho(nextDirectory, path.subList(1, path.size()), contents, append);
+            var nextDirectory = currentDirectory.findEntry(head(path)).asDirectory();
+            var newNextDirectory = getRootAfterEcho(nextDirectory, tail(path), contents, append);
 
             if (newNextDirectory == nextDirectory) {
                 return currentDirectory;
             } else {
-                return currentDirectory.replaceEntry(path.get(0), newNextDirectory);
+                return currentDirectory.replaceEntry(head(path), newNextDirectory);
             }
         }
     }

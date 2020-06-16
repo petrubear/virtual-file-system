@@ -6,6 +6,9 @@ import emg.java.vfs.filesystem.State;
 import java.util.Arrays;
 import java.util.List;
 
+import static emg.java.vfs.extensions.ListExtensions.head;
+import static emg.java.vfs.extensions.ListExtensions.tail;
+
 public class Rm extends Command {
 
     private final String name;
@@ -50,18 +53,18 @@ public class Rm extends Command {
     private Directory rmHelper(Directory currentDirectory, List<String> path) {
         if (path.isEmpty()) {
             return currentDirectory;
-        } else if (path.subList(1, path.size()).isEmpty()) {
-            return currentDirectory.removeEntry(path.get(0));
+        } else if (tail(path).isEmpty()) {
+            return currentDirectory.removeEntry(head(path));
         } else {
-            var nextDirectory = currentDirectory.findEntry(path.get(0));
+            var nextDirectory = currentDirectory.findEntry(head(path));
             if (!nextDirectory.isDirectory()) {
                 return currentDirectory;
             } else {
-                var newNextDirectory = rmHelper(nextDirectory.asDirectory(), path.subList(1, path.size()));
+                var newNextDirectory = rmHelper(nextDirectory.asDirectory(), tail(path));
                 if (newNextDirectory == nextDirectory) {
                     return currentDirectory;
                 } else {
-                    return currentDirectory.replaceEntry(path.get(0), newNextDirectory);
+                    return currentDirectory.replaceEntry(head(path), newNextDirectory);
                 }
             }
         }

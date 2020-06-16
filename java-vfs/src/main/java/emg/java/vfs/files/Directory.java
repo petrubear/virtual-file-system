@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static emg.java.vfs.extensions.ListExtensions.head;
+import static emg.java.vfs.extensions.ListExtensions.tail;
+
 public class Directory extends DirEntry {
     public static final String SEPARATOR = "/";
     public static final String ROOT_PATH = "/";
@@ -41,10 +44,10 @@ public class Directory extends DirEntry {
     private DirEntry findEntryHelper(String name, List<DirEntry> contentList) {
         if (contentList.isEmpty()) {
             return null;
-        } else if (contentList.get(0).name.equals(name)) {
-            return contentList.get(0);
+        } else if (head(contentList).name.equals(name)) {
+            return head(contentList);
         } else {
-            return findEntryHelper(name, contentList.subList(1, contentList.size()));
+            return findEntryHelper(name, tail(contentList));
         }
     }
 
@@ -57,7 +60,7 @@ public class Directory extends DirEntry {
         if (path.isEmpty()) {
             return this;
         } else {
-            return findEntry(path.get(0)).asDirectory().findDesendant(path.subList(1, path.size()));
+            return findEntry(head(path)).asDirectory().findDesendant(tail(path));
         }
     }
 

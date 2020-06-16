@@ -5,6 +5,9 @@ import emg.java.vfs.filesystem.State;
 
 import java.util.List;
 
+import static emg.java.vfs.extensions.ListExtensions.head;
+import static emg.java.vfs.extensions.ListExtensions.tail;
+
 public class Ls extends Command {
     @Override
     public State apply(State state) {
@@ -17,9 +20,8 @@ public class Ls extends Command {
         if (contents.isEmpty()) {
             return "";
         } else {
-            var entry = contents.get(0);
-            return String.format("%s [%s]%n%s", entry.name(),
-                entry.getType(), createNiceOutput(contents.subList(1, contents.size())));
+            var entry = head(contents);
+            return String.format("%s [%s]%n%s", entry.name(), entry.getType(), createNiceOutput(tail(contents)));
         }
     }
 }

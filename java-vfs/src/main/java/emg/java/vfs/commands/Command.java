@@ -5,6 +5,8 @@ import emg.java.vfs.filesystem.State;
 import java.util.Arrays;
 import java.util.function.Function;
 
+import static emg.java.vfs.extensions.ListExtensions.tail;
+
 public abstract class Command implements Function<State, State> {
 
     public static Command from(String input) {
@@ -54,7 +56,7 @@ public abstract class Command implements Function<State, State> {
                     if (tokens.length < 2) {
                         return incompleteCommand(ECHO);
                     } else {
-                        return new Echo(Arrays.asList(tokens).subList(1, tokens.length));
+                        return new Echo(tail(Arrays.asList(tokens)));
                     }
                 case CAT:
                     if (tokens.length < 2) {

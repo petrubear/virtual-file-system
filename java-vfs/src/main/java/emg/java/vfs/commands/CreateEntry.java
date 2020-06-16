@@ -6,6 +6,9 @@ import emg.java.vfs.filesystem.State;
 
 import java.util.List;
 
+import static emg.java.vfs.extensions.ListExtensions.head;
+import static emg.java.vfs.extensions.ListExtensions.tail;
+
 public abstract class CreateEntry extends Command {
     private final String name;
 
@@ -47,9 +50,9 @@ public abstract class CreateEntry extends Command {
         if (path.isEmpty()) {
             return currentDirectory.addEntry(newEntry);
         } else {
-            var oldEntry = currentDirectory.findEntry(path.get(0));
+            var oldEntry = currentDirectory.findEntry(head(path));
             return currentDirectory.replaceEntry(oldEntry.name(), updateStructure(oldEntry.asDirectory(),
-                path.subList(1, path.size()), newEntry));
+                tail(path), newEntry));
         }
     }
 
