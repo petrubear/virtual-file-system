@@ -7,7 +7,7 @@ import emg.java.vfs.filesystem.State;
 import java.util.List;
 
 public abstract class CreateEntry extends Command {
-    private String name;
+    private final String name;
 
     public CreateEntry(String name) {
         this.name = name;
@@ -32,7 +32,7 @@ public abstract class CreateEntry extends Command {
         //1 all directories in path
         var allDirsInPath = wd.getAllFoldersInPath();
         //2 create new directory in wd
-        var newDirectory = createSpecificEntry(state, name);//Directory.empty(wd.path(), name);
+        var newDirectory = createSpecificEntry(state, name);
         //3 update the directory structure
         var newRoot = updateStructure(state.root(), allDirsInPath, newDirectory);
         //4 find the new WD

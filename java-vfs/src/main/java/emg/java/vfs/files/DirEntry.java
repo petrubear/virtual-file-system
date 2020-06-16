@@ -11,10 +11,6 @@ public abstract class DirEntry {
         this.name = name;
     }
 
-    public String parentPath() {
-        return parentPath;
-    }
-
     public String name() {
         return name;
     }

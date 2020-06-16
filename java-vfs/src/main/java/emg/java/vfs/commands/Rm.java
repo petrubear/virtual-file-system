@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Rm extends Command {
 
-    private String name;
+    private final String name;
 
     public Rm(String name) {
         this.name = name;

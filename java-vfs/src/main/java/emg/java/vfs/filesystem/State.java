@@ -3,10 +3,10 @@ package emg.java.vfs.filesystem;
 import emg.java.vfs.files.Directory;
 
 public class State {
-    public final static String SHELL_TOKEN = "[java] $_> ";
-    private Directory root;
-    private Directory wd;
-    private String output;
+    public static final String SHELL_TOKEN = "[java] $_> ";
+    private final Directory root;
+    private final Directory wd;
+    private final String output;
 
     public State(Directory root, Directory wd, String output) {
         this.root = root;

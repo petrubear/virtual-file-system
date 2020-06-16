@@ -6,7 +6,6 @@ import emg.java.vfs.filesystem.State;
 
 public class Mkdir extends CreateEntry {
 
-
     public Mkdir(String name) {
         super(name);
     }

@@ -43,8 +43,7 @@ public class Cd extends Command {
         // 1 tokens
         var tokens = Arrays.asList(absolutePath.substring(1).split(Directory.SEPARATOR));
         // eliminate . tokens
-        var newTokens = collapseRelativeTokens(tokens, new ArrayList<String>());
-
+        var newTokens = collapseRelativeTokens(tokens, new ArrayList<>());
         // 2 navigate
         if (newTokens == null) {
             return null;

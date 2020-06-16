@@ -18,7 +18,8 @@ public class Ls extends Command {
             return "";
         } else {
             var entry = contents.get(0);
-            return String.format("%s [%s]\n%s", entry.name(), entry.getType(), createNiceOutput(contents.subList(1, contents.size())));
+            return String.format("%s [%s]%n%s", entry.name(),
+                entry.getType(), createNiceOutput(contents.subList(1, contents.size())));
         }
     }
 }

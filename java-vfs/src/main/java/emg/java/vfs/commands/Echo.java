@@ -55,7 +55,7 @@ public class Echo extends Command {
             foldersInPath.add(fileName);
             var newRoot = getRootAfterEcho(state.root(), foldersInPath, contents, append);
             if (newRoot == state.root()) {
-                return state.setMessage(fileName = ": No such file or directory");
+                return state.setMessage(fileName + ": No such file or directory");
             } else {
                 return State.apply(newRoot, newRoot.findDesendant(state.wd().getAllFoldersInPath()));
             }

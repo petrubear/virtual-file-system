@@ -1,7 +1,7 @@
 package emg.java.vfs.files;
 
 public class File extends DirEntry {
-    private String contents;
+    private final String contents;
 
     public File(String parentPath, String name, String contents) {
         super(parentPath, name);

@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Directory extends DirEntry {
-    public final static String SEPARATOR = "/";
-    public final static String ROOT_PATH = "/";
+    public static final String SEPARATOR = "/";
+    public static final String ROOT_PATH = "/";
 
-    private List<DirEntry> contents;
+    private final List<DirEntry> contents;
 
     public Directory(String parentPath, String name, List<DirEntry> contents) {
         super(parentPath, name);
@@ -29,9 +29,9 @@ public class Directory extends DirEntry {
     }
 
     public Directory replaceEntry(String entryName, DirEntry newEntry) {
-        List<DirEntry> contents = this.contents.stream().filter(d -> !d.name.equals(entryName)).collect(Collectors.toList());
-        contents.add(newEntry);
-        return new Directory(parentPath, name, contents);
+        List<DirEntry> entryContents = this.contents.stream().filter(d -> !d.name.equals(entryName)).collect(Collectors.toList());
+        entryContents.add(newEntry);
+        return new Directory(parentPath, name, entryContents);
     }
 
     public DirEntry findEntry(String entryName) {
