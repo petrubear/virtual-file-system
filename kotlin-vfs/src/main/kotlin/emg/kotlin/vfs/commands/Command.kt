@@ -1,9 +1,10 @@
 package emg.kotlin.vfs.commands
 
 import emg.kotlin.vfs.filesystem.State
+import java.util.function.Function
 
 
-abstract class Command {
+abstract class Command : Function<State, State> {
     companion object {
         private const val MKDIR = "mkdir"
         private const val LS = "ls"
@@ -16,50 +17,43 @@ abstract class Command {
 
         fun from(input: String): Command {
             val tokens = input.split(" ")
-            if (input.isEmpty() || tokens.isEmpty()) {
-                return emptyCommand()
-            } else if (MKDIR == tokens[0]) {
-                return if (tokens.size < 2) {
+            return if (input.isEmpty() || tokens.isEmpty()) {
+                emptyCommand()
+            } else when (tokens[0]) {
+                MKDIR -> if (tokens.size < 2) {
                     incompleteCommand(MKDIR)
                 } else {
                     Mkdir(tokens[1])
                 }
-            } else if (LS == tokens[0]) {
-                return LS()
-            } else if (PWD == tokens[0]) {
-                return Pwd()
-            } else if (TOUCH == tokens[0]) {
-                return if (tokens.size < 2) {
+                LS -> LS()
+                PWD -> Pwd()
+                TOUCH -> if (tokens.size < 2) {
                     incompleteCommand(TOUCH)
                 } else {
                     Touch(tokens[1])
                 }
-            } else if (CD == tokens[0]) {
-                return if (tokens.size < 2) {
+                CD -> if (tokens.size < 2) {
                     incompleteCommand(CD)
                 } else {
                     Cd(tokens[1])
                 }
-            } else if (RM == tokens[0]) {
-                return if (tokens.size < 2) {
+                RM -> if (tokens.size < 2) {
                     incompleteCommand(RM)
                 } else {
                     Rm(tokens[1])
                 }
-            } else if (ECHO == tokens[0]) {
-                return if (tokens.size < 2) {
+                ECHO -> if (tokens.size < 2) {
                     incompleteCommand(ECHO)
                 } else {
                     Echo(tokens.subList(1, tokens.size).toTypedArray())
                 }
-            } else if (CAT == tokens[0]) {
-                return if (tokens.size < 2) {
+                CAT -> if (tokens.size < 2) {
                     incompleteCommand(CAT)
                 } else {
                     Cat(tokens[1])
                 }
+                else -> UnknownCommand()
             }
-            return UnknownCommand()
         }
 
         private fun incompleteCommand(name: String): Command {
@@ -78,6 +72,4 @@ abstract class Command {
             }
         }
     }
-
-    abstract fun apply(state: State): State
 }

@@ -2,7 +2,7 @@ package emg.kotlin.vfs.commands
 
 import emg.kotlin.vfs.filesystem.State
 
-class Cat(val fileName: String) : Command() {
+class Cat(private val fileName: String) : Command() {
     override fun apply(state: State): State {
         val wd = state.wd
         val dirEntry = wd.findEntry(fileName)

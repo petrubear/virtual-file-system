@@ -12,7 +12,7 @@ class Directory constructor(parentPath: String, name: String,
     }
 
     fun replaceEntry(entryName: String, newEntry: DirEntry): Directory {
-        val newContents = contents.filter { d -> !d.name.equals(entryName) }.toMutableList()
+        val newContents = contents.filter { d -> d.name != entryName }.toMutableList()
         newContents.add(newEntry)
         return Directory(parentPath, name, newContents)
     }

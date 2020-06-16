@@ -7,18 +7,20 @@ import emg.kotlin.vfs.filesystem.State
 
 class Echo(val args: Array<String>) : Command() {
     override fun apply(state: State): State {
-        if (args.isEmpty()) return state
-        else if (args.size == 1) return state.setMessage(args[0])
-        else {
-            val operator = args[args.size - 2]
-            val fileName = args[args.size - 1]
-            val contents = createContent(args, args.size - 2)
+        return when {
+            args.isEmpty() -> state
+            args.size == 1 -> state.setMessage(args[0])
+            else -> {
+                val operator = args[args.size - 2]
+                val fileName = args[args.size - 1]
+                val contents = createContent(args, args.size - 2)
 
-            if (">>".equals(operator))
-                return doEcho(state, contents, fileName, append = true)
-            else if (">".equals(operator))
-                return doEcho(state, contents, fileName, append = false)
-            else return state.setMessage(createContent(args, args.size))
+                when (operator) {
+                    ">>" -> doEcho(state, contents, fileName, append = true)
+                    ">" -> doEcho(state, contents, fileName, append = false)
+                    else -> state.setMessage(createContent(args, args.size))
+                }
+            }
         }
     }
 

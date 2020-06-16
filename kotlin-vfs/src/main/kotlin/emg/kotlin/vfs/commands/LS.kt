@@ -4,11 +4,11 @@ import emg.kotlin.vfs.files.DirEntry
 import emg.kotlin.vfs.filesystem.State
 
 class LS : Command() {
-    fun createNiceOutput(contents: List<DirEntry>): String {
-        if (contents.isEmpty()) return ""
+    private fun createNiceOutput(contents: List<DirEntry>): String {
+        return if (contents.isEmpty()) ""
         else {
-            val entry = contents.get(0)
-            return entry.name + " [${entry.getType()}]\n${createNiceOutput(contents.subList(1, contents.size))}"
+            val entry = contents[0]
+            entry.name + " [${entry.getType()}]\n${createNiceOutput(contents.subList(1, contents.size))}"
         }
     }
 

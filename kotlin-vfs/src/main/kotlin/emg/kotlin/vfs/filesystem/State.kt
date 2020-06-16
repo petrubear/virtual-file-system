@@ -13,7 +13,7 @@ class State constructor(val root: Directory, val wd: Directory, private val outp
 
     fun show() {
         println(output)
-        print(State.SHELL_TOKEN)
+        print(SHELL_TOKEN)
     }
 
     fun setMessage(message: String): State {

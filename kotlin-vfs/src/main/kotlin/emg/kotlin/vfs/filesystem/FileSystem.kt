@@ -10,7 +10,6 @@ class FileSystem {
         fun main(args: Array<String>) {
             FileSystem().main()
         }
-
     }
 
     private val scanner = Scanner(System.`in`)
