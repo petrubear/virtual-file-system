@@ -34,4 +34,8 @@ public class File extends DirEntry {
     public File setContents(String newContents) {
         return new File(parentPath, name, newContents);
     }
+
+    public String contents() {
+        return contents;
+    }
 }

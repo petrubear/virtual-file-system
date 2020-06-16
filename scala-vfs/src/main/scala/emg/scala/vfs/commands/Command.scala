@@ -14,6 +14,7 @@ object Command {
   private val CD = "cd"
   private val RM = "rm"
   private val ECHO = "echo"
+  private val CAT = "cat"
 
   def emptyCommand: Command = (state: State) => state
 
@@ -42,6 +43,9 @@ object Command {
     } else if (ECHO.equals(tokens(0))) {
       if (tokens.length < 2) incompleteCommand(ECHO)
       else new Echo(tokens.tail)
+    } else if (CAT.equals(tokens(0))) {
+      if (tokens.length < 2) incompleteCommand(CAT)
+      else new Cat(tokens(1))
     }
     else new UnknownCommand
   }

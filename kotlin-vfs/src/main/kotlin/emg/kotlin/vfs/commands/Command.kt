@@ -12,6 +12,7 @@ abstract class Command {
         private const val CD = "cd"
         private const val RM = "rm"
         private const val ECHO = "echo"
+        private const val CAT = "cat"
 
         fun from(input: String): Command {
             val tokens = input.split(" ")
@@ -50,6 +51,12 @@ abstract class Command {
                     incompleteCommand(ECHO)
                 } else {
                     Echo(tokens.subList(1, tokens.size).toTypedArray())
+                }
+            } else if (CAT == tokens[0]) {
+                return if (tokens.size < 2) {
+                    incompleteCommand(CAT)
+                } else {
+                    Cat(tokens[1])
                 }
             }
             return UnknownCommand()

@@ -15,6 +15,7 @@ public abstract class Command {
         final String CD = "cd";
         final String RM = "rm";
         final String ECHO = "echo";
+        final String CAT = "cat";
 
         var tokens = input.split(" ");
         if (input.isEmpty() || tokens.length == 0) {
@@ -53,9 +54,14 @@ public abstract class Command {
             } else {
                 return new Echo(Arrays.asList(tokens).subList(1, tokens.length));
             }
-        } else {
-            return new UnknownCommand();
+        } else if (CAT.equals(tokens[0])) {
+            if (tokens.length < 2) {
+                return incompleteCommand(CAT);
+            } else {
+                return new Cat(tokens[1]);
+            }
         }
+        return new UnknownCommand();
     }
 
     private static Command incompleteCommand(String name) {
