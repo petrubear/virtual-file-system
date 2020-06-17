@@ -1,5 +1,7 @@
 package emg.kotlin.vfs.commands
 
+import emg.kotlin.vfs.extensions.head
+import emg.kotlin.vfs.extensions.tail
 import emg.kotlin.vfs.files.DirEntry
 import emg.kotlin.vfs.files.Directory
 import emg.kotlin.vfs.filesystem.State
@@ -40,9 +42,9 @@ abstract class CreateEntry constructor(private val name: String) : Command() {
     private fun updateStructure(currentDirectory: Directory, path: List<String>, newEntry: DirEntry): Directory {
         return if (path.isEmpty()) currentDirectory.addEntry(newEntry)
         else {
-            val oldEntry = currentDirectory.findEntry(path[0])!!
+            val oldEntry = currentDirectory.findEntry(path.head())!!
             currentDirectory.replaceEntry(oldEntry.name, updateStructure(oldEntry.asDirectory(),
-                    path.subList(1, path.size), newEntry))
+                    path.tail(), newEntry))
         }
     }
 

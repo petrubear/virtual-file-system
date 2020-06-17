@@ -1,5 +1,7 @@
 package emg.kotlin.vfs.commands
 
+import emg.kotlin.vfs.extensions.head
+import emg.kotlin.vfs.extensions.tail
 import emg.kotlin.vfs.files.DirEntry
 import emg.kotlin.vfs.filesystem.State
 
@@ -7,8 +9,8 @@ class LS : Command() {
     private fun createNiceOutput(contents: List<DirEntry>): String {
         return if (contents.isEmpty()) ""
         else {
-            val entry = contents[0]
-            entry.name + " [${entry.getType()}]\n${createNiceOutput(contents.subList(1, contents.size))}"
+            val entry = contents.head()
+            entry.name + " [${entry.getType()}]\n${createNiceOutput(contents.tail())}"
         }
     }
 

@@ -1,5 +1,8 @@
 package emg.kotlin.vfs.commands
 
+import emg.kotlin.vfs.extensions.head
+import emg.kotlin.vfs.extensions.init
+import emg.kotlin.vfs.extensions.tail
 import emg.kotlin.vfs.files.DirEntry
 import emg.kotlin.vfs.files.Directory
 import emg.kotlin.vfs.filesystem.State
@@ -35,24 +38,24 @@ class Cd(private val dir: String) : Command() {
     }
 
     private fun findEntryHelper(currentDirectory: Directory, path: List<String>): DirEntry? {
-        return if (path.isEmpty() || path[0].isEmpty()) currentDirectory
-        else if (path.subList(0, path.size).isEmpty()) currentDirectory.findEntry(path[0])
+        return if (path.isEmpty() || path.head().isEmpty()) currentDirectory
+        else if (path.tail().isEmpty()) currentDirectory.findEntry(path.head())
         else {
-            val nextDir = currentDirectory.findEntry(path[0])
+            val nextDir = currentDirectory.findEntry(path.head())
             if (nextDir == null || !nextDir.isDirectory()) null
-            else findEntryHelper(nextDir.asDirectory(), path.subList(1, path.size))
+            else findEntryHelper(nextDir.asDirectory(), path.tail())
         }
     }
 
     private fun collapseRelativeTokens(path: List<String>, result: MutableList<String>): List<String>? {
         return if (path.isEmpty()) result
-        else if ("." == path[0]) collapseRelativeTokens(path.subList(1, path.size), result)
-        else if (".." == path[0]) {
+        else if ("." == path.head()) collapseRelativeTokens(path.tail(), result)
+        else if (".." == path.head()) {
             if (result.isEmpty()) null
-            else collapseRelativeTokens(path.subList(1, path.size), result.subList(0, result.size - 1))
+            else collapseRelativeTokens(path.tail(), result.init())
         } else {
-            result.add(path[0])
-            collapseRelativeTokens(path.subList(1, path.size), result)
+            result.add(path.head())
+            collapseRelativeTokens(path.tail(), result)
         }
     }
 

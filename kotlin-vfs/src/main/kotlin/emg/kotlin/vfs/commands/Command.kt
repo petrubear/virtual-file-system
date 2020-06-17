@@ -1,5 +1,6 @@
 package emg.kotlin.vfs.commands
 
+import emg.kotlin.vfs.extensions.tail
 import emg.kotlin.vfs.filesystem.State
 import java.util.function.Function
 
@@ -45,7 +46,7 @@ abstract class Command : Function<State, State> {
                 ECHO -> if (tokens.size < 2) {
                     incompleteCommand(ECHO)
                 } else {
-                    Echo(tokens.subList(1, tokens.size).toTypedArray())
+                    Echo(tokens.tail().toTypedArray())
                 }
                 CAT -> if (tokens.size < 2) {
                     incompleteCommand(CAT)

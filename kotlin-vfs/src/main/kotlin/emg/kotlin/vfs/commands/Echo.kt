@@ -1,5 +1,7 @@
 package emg.kotlin.vfs.commands
 
+import emg.kotlin.vfs.extensions.head
+import emg.kotlin.vfs.extensions.tail
 import emg.kotlin.vfs.files.Directory
 import emg.kotlin.vfs.files.File
 import emg.kotlin.vfs.filesystem.State
@@ -27,20 +29,20 @@ class Echo(val args: Array<String>) : Command() {
 
     private fun getRootAfterEcho(currentDirectory: Directory, path: List<String>, contents: String, append: Boolean): Directory {
         return if (path.isEmpty()) currentDirectory
-        else if (path.subList(1, path.size).isEmpty()) {
-            val dirEntry = currentDirectory.findEntry(path[0])
+        else if (path.tail().isEmpty()) {
+            val dirEntry = currentDirectory.findEntry(path.head())
             when {
-                dirEntry == null -> currentDirectory.addEntry(File(currentDirectory.path(), path[0], contents))
+                dirEntry == null -> currentDirectory.addEntry(File(currentDirectory.path(), path.head(), contents))
                 dirEntry.isDirectory() -> currentDirectory
-                append -> currentDirectory.replaceEntry(path[0], dirEntry.asFile().appendContents(contents))
-                else -> currentDirectory.replaceEntry(path[0], dirEntry.asFile().setContents(contents))
+                append -> currentDirectory.replaceEntry(path.head(), dirEntry.asFile().appendContents(contents))
+                else -> currentDirectory.replaceEntry(path.head(), dirEntry.asFile().setContents(contents))
             }
         } else {
-            val nextDirectory = currentDirectory.findEntry(path[0])!!.asDirectory()
-            val newNextDirectory = getRootAfterEcho(nextDirectory, path.subList(1, path.size), contents, append)
+            val nextDirectory = currentDirectory.findEntry(path.head())!!.asDirectory()
+            val newNextDirectory = getRootAfterEcho(nextDirectory, path.tail(), contents, append)
 
             if (newNextDirectory == nextDirectory) currentDirectory
-            else currentDirectory.replaceEntry(path[0], newNextDirectory)
+            else currentDirectory.replaceEntry(path.head(), newNextDirectory)
         }
     }
 

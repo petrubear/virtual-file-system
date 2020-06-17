@@ -1,5 +1,7 @@
 package emg.kotlin.vfs.files
 
+import emg.kotlin.vfs.extensions.head
+import emg.kotlin.vfs.extensions.tail
 import java.util.*
 
 class Directory constructor(parentPath: String, name: String,
@@ -22,8 +24,8 @@ class Directory constructor(parentPath: String, name: String,
         fun findEntryHelper(name: String, contentList: List<DirEntry>): DirEntry? {
             return when {
                 contentList.isEmpty() -> null
-                contentList[0].name == name -> contentList[0]
-                else -> findEntryHelper(name, contentList.subList(1, contentList.size))
+                contentList.head().name == name -> contentList.head()
+                else -> findEntryHelper(name, contentList.tail())
             }
         }
 
@@ -38,7 +40,7 @@ class Directory constructor(parentPath: String, name: String,
 
     fun findDesendant(path: List<String>): Directory {
         return if (path.isEmpty()) this
-        else findEntry(path[0])!!.asDirectory().findDesendant(path.subList(1, path.size))
+        else findEntry(path.head())!!.asDirectory().findDesendant(path.tail())
     }
 
     fun findDesendant(relativePath: String): Directory {

@@ -1,5 +1,7 @@
 package emg.kotlin.vfs.commands
 
+import emg.kotlin.vfs.extensions.head
+import emg.kotlin.vfs.extensions.tail
 import emg.kotlin.vfs.files.Directory
 import emg.kotlin.vfs.filesystem.State
 
@@ -24,14 +26,14 @@ class Rm(val name: String) : Command() {
     private fun doRm(state: State, path: String): State {
         fun rmHelper(currentDirectory: Directory, path: List<String>): Directory {
             return if (path.isEmpty()) currentDirectory
-            else if (path.subList(1, path.size).isEmpty()) currentDirectory.removeEntry(path[0])
+            else if (path.tail().isEmpty()) currentDirectory.removeEntry(path.head())
             else {
-                val nextDirectory = currentDirectory.findEntry(path[0])
+                val nextDirectory = currentDirectory.findEntry(path.head())
                 if (!nextDirectory!!.isDirectory()) currentDirectory
                 else {
-                    val newNextDirectory = rmHelper(nextDirectory.asDirectory(), path.subList(1, path.size))
+                    val newNextDirectory = rmHelper(nextDirectory.asDirectory(), path.tail())
                     if (newNextDirectory == nextDirectory) currentDirectory
-                    else currentDirectory.replaceEntry(path[0], newNextDirectory)
+                    else currentDirectory.replaceEntry(path.head(), newNextDirectory)
                 }
             }
         }
